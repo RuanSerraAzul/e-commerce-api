@@ -34,12 +34,14 @@ jobs:
     - name: Copy .env
       run: |
         echo ---Copying .env---
+        docker-compose -f docker-compose.yml exec -T php chmod 777 .env
         docker-compose -f docker-compose.yml exec -T php php -r "file_exists('.env') || copy('.env.example', '.env');"
         echo ------Copied .env---------
 
     - name: Install dependencies
       run: |
         echo ---Installing dependencies---
+        docker-compose -f docker-compose.yml exec -T php mkdir -p /var/www/vendor
         docker-compose -f docker-compose.yml exec -T php composer install
         echo ------Installed dependencies--------
 
