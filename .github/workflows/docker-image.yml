@@ -27,31 +27,30 @@ jobs:
     - name: Build the Docker image
       run: |
         echo ---Building and starting up docker---
-        docker-compose -f docker-compose.yml up -d
+        docker-compose -f docker-compose.yml up -d --build
         echo ---Containers up---
-        echo ---Waiting for containers to start---
-        sleep 15
+
 
     - name: Copy .env
       run: |
         echo ---Copying .env---
-        docker-compose -f docker-compose.yml exec php php -r "file_exists('.env') || copy('.env.example', '.env');"
+        docker-compose -f docker-compose.yml exec -T php php -r "file_exists('.env') || copy('.env.example', '.env');"
         echo ------Copied .env---------
 
     - name: Install dependencies
       run: |
         echo ---Installing dependencies---
-        docker-compose -f docker-compose.yml exec php composer install
+        docker-compose -f docker-compose.yml exec -T php composer install
         echo ------Installed dependencies--------
 
     - name: Migrate DB
       run: |
         echo ---Migrating DB---
-        docker-compose -f docker-compose.yml exec php php artisan migrate
+        docker-compose -f docker-compose.yml exec -T php php artisan migrate
         echo ------Migrated DB--------
 
     - name: Run phpunit tests
       run: |
         echo ---Testing application---
-        docker-compose -f docker-compose.yml exec php php artisan test
+        docker-compose -f docker-compose.yml exec -T php php artisan test
         echo ------Everything OK!--------
