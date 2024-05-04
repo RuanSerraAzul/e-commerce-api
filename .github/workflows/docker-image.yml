@@ -34,8 +34,7 @@ jobs:
     - name: Copy .env
       run: |
         echo ---Copying .env---
-        docker-compose -f docker-compose.yml exec -T php chmod 777 .env
-        docker-compose -f docker-compose.yml exec -T php php -r "file_exists('.env') || copy('.env.example', '.env');"
+        docker-compose -f docker-compose.yml exec -T php sh -c "cd /var/www && chmod 777 .env && php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         echo ------Copied .env---------
 
     - name: Install dependencies
