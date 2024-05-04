@@ -26,7 +26,7 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build the Docker image
       run: |
-        docker-compose -f docker-compose.yml up -d --build --console plain
+        docker-compose -f docker-compose.yml up --build
         docker-compose -f docker-compose.yml exec php php -r "file_exists('.env') || copy('.env.example', '.env');"
         docker-compose -f docker-compose.yml exec php composer install
         docker-compose -f docker-compose.yml exec php php artisan migrate
