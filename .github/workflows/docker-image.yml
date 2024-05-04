@@ -2,9 +2,19 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "develop" ]
+    branches:
+      - "main"
+      - "develop"
+      - "feature/**"
+      - "release/**"
+      - "hotfix/**"
   pull_request:
-    branches: [ "develop" ]
+    branches:
+      - "main"
+      - "develop"
+      - "feature/**"
+      - "release/**"
+      - "hotfix/**"
 
 jobs:
 
@@ -18,3 +28,8 @@ jobs:
       run: |
         docker build . --file Dockerfile --tag my-image-name:$(date +%s)
         docker-compose -f docker-compose.yml up -d --build
+        docker-compose -f docker-compose.yml exec php php -r "file_exists('.env') || copy('.env.example', '.env');"
+        docker-compose -f docker-compose.yml exec php composer install
+        docker-compose -f docker-compose.yml exec php php artisan migrate
+        docker-compose -f docker-compose.yml exec php php artisan test
+
