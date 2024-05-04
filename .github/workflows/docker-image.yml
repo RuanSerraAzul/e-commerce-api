@@ -34,24 +34,23 @@ jobs:
     - name: Copy .env
       run: |
         echo ---Copying .env---
-        docker-compose -f docker-compose.yml exec -T php sh -c "cd /var/www && chmod 777 .env && php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        run: php -r "file_exists('.env') || copy('.env.example', '.env');"
         echo ------Copied .env---------
 
     - name: Install dependencies
       run: |
         echo ---Installing dependencies---
-        docker-compose -f docker-compose.yml exec -T php mkdir -p /var/www/vendor
-        docker-compose -f docker-compose.yml exec -T php composer install
+        composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --ignore-platform-reqs
         echo ------Installed dependencies--------
 
     - name: Migrate DB
       run: |
         echo ---Migrating DB---
-        docker-compose -f docker-compose.yml exec -T php php artisan migrate
+        php artisan migrate
         echo ------Migrated DB--------
 
     - name: Run phpunit tests
       run: |
         echo ---Testing application---
-        docker-compose -f docker-compose.yml exec -T php php artisan test
+        php artisan test
         echo ------Everything OK!--------
