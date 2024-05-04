@@ -27,7 +27,7 @@ jobs:
     - name: Build the Docker image
       run: |
         echo ---Building and starting up docker---
-        docker-compose -f docker-compose.yml up -d
+        docker-compose -f docker-compose.yml up -d -T
         echo ---Containers up---
 
     - name: Copy .env
