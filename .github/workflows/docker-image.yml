@@ -1,0 +1,50 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+      - "main"
+      - "develop"
+      - "feature/**"
+      - "release/**"
+      - "hotfix/**"
+  pull_request:
+    branches:
+      - "main"
+      - "develop"
+      - "feature/**"
+      - "release/**"
+      - "hotfix/**"
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: |
+        echo ---Building and starting up docker---
+        docker-compose -f docker-compose.yml up -d --build
+        echo ---Containers up---
+
+
+    - name: Copy .env
+      run: |
+        echo ---Copying .env---
+        docker-compose -f docker-compose.yml exec -T --user=root php php -r "copy('.env.example', '.env');"
+        echo ------Copied .env---------
+
+    - name: Install dependencies
+      run: |
+        echo ---Installing dependencies---
+        docker-compose -f docker-compose.yml exec -T --user=root php composer install
+        echo ------Installed dependencies--------
+
+    - name: Run phpunit tests
+      run: |
+        echo ---Testing application---
+        docker-compose -f docker-compose.yml exec -T php php artisan test
+        echo ------Everything OK!--------
