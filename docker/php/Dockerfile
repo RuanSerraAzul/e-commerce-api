@@ -35,6 +35,8 @@ RUN useradd -u 1000 -ms /bin/bash -g laravel user
 
 RUN chmod 777 ../www
 
+RUN copy('.env.example', '.env');
+
 COPY --chown=user:laravel . /var/www
 
 USER user
