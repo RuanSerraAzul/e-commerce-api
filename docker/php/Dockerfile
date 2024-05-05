@@ -33,9 +33,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN groupadd -g 1000 laravel
 RUN useradd -u 1000 -ms /bin/bash -g laravel user
 
-RUN chmod 777 ../www
-
-COPY ../../sistema/.env.example .env
 
 COPY --chown=user:laravel . /var/www
 

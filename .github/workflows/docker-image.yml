@@ -30,6 +30,13 @@ jobs:
         docker-compose -f docker-compose.yml up -d --build
         echo ---Containers up---
 
+
+    - name: Copy .env
+      run: |
+        echo ---Copying .env---
+        docker-compose -f docker-compose.yml exec -T php php -r "copy('.env.example', '.env');"
+        echo ------Copied .env---------
+
     - name: Install dependencies
       run: |
         echo ---Installing dependencies---
