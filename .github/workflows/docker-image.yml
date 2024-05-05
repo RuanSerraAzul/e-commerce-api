@@ -44,18 +44,18 @@ jobs:
         echo ---Installing dependencies---
         docker-compose -f docker-compose.yml exec -T php composer install
         echo ------Installed dependencies--------
-      working-directory: sistema
+      
 
     - name: Migrate DB
       run: |
         echo ---Migrating DB---
         docker-compose -f docker-compose.yml exec -T php php artisan migrate
         echo ------Migrated DB--------
-      working-directory: sistema
+      
 
     - name: Run phpunit tests
       run: |
         echo ---Testing application---
         docker-compose -f docker-compose.yml exec -T php php artisan test
         echo ------Everything OK!--------
-      working-directory: sistema
+      
